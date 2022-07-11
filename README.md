@@ -1,5 +1,8 @@
 # ManualForHappySoftwareEngineers
 
+This script will create Wikimedia pages from ISBN numbers. 
+Wikimedia Link: https://library.42wolfsburg.de/index.php/Manual_For_Happy_Software_Engineers
+
 1. Install necessary packages: `pip3 install -r requirements.txt`
 2. Get the credentials.json file to access the Mediawiki from 42 Wolfsburg and place it into the main folder of the app
 3. Try out the edit.py to create a new wiki page for a book `python3 edit.py 9781529038347`. The number is an ISBN of your choice.
