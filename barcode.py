@@ -8,7 +8,7 @@ import datetime
 from datetime import datetime
 import imutils
 import time
-import edit
+import add_book_Notion
 import cv2
 # import winsound
 frequency = 2500  # Set Frequency To 2500 Hertz
@@ -35,7 +35,7 @@ while True:
 		(x, y, width, height) = barcode.rect
 		cv2.rectangle(frameData, (x, y), (x + width, y + height), (0, 0, 255), 2)
 		barcodeData = barcode.data.decode("utf-8")
-		edit.create_entry(barcodeData)
+		add_book_Notion.create_entry(barcodeData)
 		print(barcodeData)
 
 #			winsound.Beep(frequency, duration)
