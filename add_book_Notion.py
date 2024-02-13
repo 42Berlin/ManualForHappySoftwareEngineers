@@ -42,7 +42,10 @@ def create_entry(isbn):
         subtitle = bookinfo['subtitle']
     else:
         subtitle = ""
-    authors = str(bookinfo['authors']).strip("[]").replace("\'","")
+    if 'authors' in bookinfo:
+        authors = str(bookinfo['authors']).strip("[]").replace("\'","")
+    else:
+        authors = ""
     if 'publisher' in bookinfo:
         publisher = bookinfo['publisher']
     else:
@@ -52,14 +55,21 @@ def create_entry(isbn):
     else:
         published_date = ""
     if 'imageLinks' in bookinfo:
-        image = bookinfo['imageLinks']['thumbnail'] + ".jpeg"
+        image = bookinfo['imageLinks']['thumbnail']
     else:
         image = ""
     for identifier in bookinfo['industryIdentifiers']:
-        if identifier['type'] == "ISBN":
+        if identifier['type'] == "ISBN_13":
             isbn = identifier['identifier']
     if 'description' in bookinfo:
-        description = bookinfo['description']
+        description = str(bookinfo['description']).split(' ________________________________________ ')
+        if len(description) > 1:
+            description = description[1]
+        else:
+            if len(description[0]) > 1999:
+                description = description[0][:1996] + '...'
+            else:
+                description = description[0]
     else:
         description = ""
     # Define the properties for the new page
@@ -117,22 +127,40 @@ def create_entry(isbn):
                     }
                 }
             ]
+        },
+        "Published": {
+            "rich_text": [
+                {
+                    "text": {
+                        "content": published_date
+                    }
+                }
+            ]
         }
     }
-    book_cover = {"type": "external",
-            "external": {
-                "url": image
-                }
-            }
+    book_cover = {
+        "type": "external",
+        "external": {
+            "url": image
+        }
+    }
 
     # Define the new page
-    new_page = {
-        "parent": {
-            "database_id": database_id
-        },
-        "properties": new_page_properties,
-        "cover": book_cover
-    }
+    if 'imageLinks' in bookinfo:
+        new_page = {
+            "parent": {
+                "database_id": database_id
+            },
+            "properties": new_page_properties,
+            "cover": book_cover
+        }
+    else:
+        new_page = {
+            "parent": {
+                "database_id": database_id
+            }
+            "properties": new_page_properties,
+        }
 
     # Send the request to create the new page
     response = requests.post(notion_api_endpoint, headers=headers, json=new_page)
