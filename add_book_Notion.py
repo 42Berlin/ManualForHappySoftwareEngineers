@@ -50,7 +50,7 @@ def create_entry(isbn):
         publisher = bookinfo['publisher']
     else:
         publisher = ""
-    if 'published_date' in bookinfo:
+    if 'publishedDate' in bookinfo:
         published_date = bookinfo['publishedDate']
     else:
         published_date = ""
@@ -158,7 +158,7 @@ def create_entry(isbn):
         new_page = {
             "parent": {
                 "database_id": database_id
-            }
+            },
             "properties": new_page_properties,
         }
 
